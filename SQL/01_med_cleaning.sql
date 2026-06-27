@@ -1,40 +1,38 @@
-/*
-  DESC: Transformation of raw medical claims into a refined view.
-        Engineering 'Risk Buckets' to enable actuarial segmentation 
-        in Power BI based on demographic and lifestyle risk factors.
+/* 
+  Objective: Verify the three pillars of data integrity.
+  Target: insurance-claims-risk-dash.auto_insurance_claims.raw_medical_claims
 */
 
-CREATE OR REPLACE VIEW `insurance-claims-risk-dash.auto_insurance_claims.v_medical_refined` AS (
+WITH medical_audit AS (
   SELECT 
-    -- Demographic Risk Factors
-    CAST(age AS INT64) AS member_age,
-    sex AS member_gender,
-    CAST(children AS INT64) AS dependent_count,
-    region AS geographical_region,
+    *,
+    -- 1. Validity Check: Flagging unrealistic ages (Actuarial outlier detection)
+    CASE WHEN age < 18 OR age > 100 THEN 1 ELSE 0 END AS invalid_age_flag,
+    
+    -- 2. Completeness Check: Flagging zero or null claims (Financial leakage)
+    CASE WHEN charges IS NULL OR charges <= 0 THEN 1 ELSE 0 END AS missing_financial_flag,
 
-    -- Health/Lifestyle Risk Factors
-    bmi AS body_mass_index,
-    smoker AS smoking_status_flag,
+    -- 3. Uniqueness Check: Creating a row hash to detect exact duplicate entries
+    -- Since medical data lacks a Policy_ID, we check if the entire row is a duplicate
+    FARM_FINGERPRINT(CONCAT(CAST(age AS STRING), sex, CAST(bmi AS STRING), CAST(children AS STRING), smoker, region, CAST(charges AS STRING))) AS row_id
+  FROM `insurance-claims-risk-dash.auto_insurance_claims.raw_medical_claims`
+)
 
-    -- Financial Metric (The 'Charges' in health insurance is the claim cost)
-    CAST(charges AS FLOAT64) AS claim_amount_usd,
+SELECT 
+  -- Total Exposure (Total records)
+  COUNT(*) AS total_records,
 
-    -- Actuarial Feature Engineering: BMI Categorization
-    CASE 
-        WHEN bmi < 18.5 THEN 'Underweight'
-        WHEN bmi BETWEEN 18.5 AND 24.9 THEN 'Healthy'
-        WHEN bmi BETWEEN 25 AND 29.9 THEN 'Overweight'
-        WHEN bmi >= 30 THEN 'Obese'
-        ELSE 'Unknown'
-    END AS bmi_risk_segment,
+  -- PILLAR 1: COMPLETENESS
+  SUM(missing_financial_flag) AS null_or_zero_claims,
+  ROUND(SUM(missing_financial_flag) / COUNT(*) * 100, 2) AS completeness_error_rate_pct,
 
-    -- Actuarial Feature Engineering: Age Brackets
-    CASE 
-        WHEN age < 25 THEN 'Youth'
-        WHEN age BETWEEN 25 AND 50 THEN 'Adult'
-        WHEN age > 50 THEN 'Senior'
-    END AS demographic_segment
+  -- PILLAR 2: VALIDITY
+  MIN(age) AS min_age_found,
+  MAX(age) AS max_age_found,
+  SUM(invalid_age_flag) AS unrealistic_age_count,
 
-  FROM 
-    `insurance-claims-risk-dash.auto_insurance_claims.raw_medical_claims`
-);
+  -- PILLAR 3: UNIQUENESS
+  COUNT(DISTINCT row_id) AS unique_records,
+  COUNT(*) - COUNT(DISTINCT row_id) AS duplicate_row_count
+
+FROM medical_audit;
