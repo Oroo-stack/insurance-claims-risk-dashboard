@@ -6,7 +6,7 @@
 WITH medical_audit AS (
   SELECT 
     *,
-    -- 1. Validity Check: Flagging unrealistic ages (Actuarial outlier detection)
+    -- 1. Validity Check: Flagging unrealistic ages 
     CASE WHEN age < 18 OR age > 100 THEN 1 ELSE 0 END AS invalid_age_flag,
     
     -- 2. Completeness Check: Flagging zero or null claims (Financial leakage)
