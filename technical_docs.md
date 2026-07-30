@@ -10,3 +10,6 @@ DIVIDE(
     [Total Claims Frequency], 
     0
 )
+
+Data Modeling: Implemented a Star Schema utilizing Conformed Dimensions for Geography and Gender.
+Relationship Logic: Established One-to-Many bidirectional-ready relationships to ensure seamless cross-filtering between Motor and Health divisions.
