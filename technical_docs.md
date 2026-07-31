@@ -19,3 +19,24 @@ Visual Logic: Page 1 utilizes a "Executive Pulse" layout to monitor solvency and
 
 DAX Evolution: Refined Institutional Loss Ratio to dynamic context-switching between Motor (Actual) and Health (Proxy) premiums.
 Governance: Implemented Dim_Geography and Dim_Gender as conformed dimensions for institutional cross-filtering.
+
+```
+Total Premium Collected = 
+-- 1. Calculate the real sum for each division separately
+VAR MotorPremiumCalculated = SUM('v_auto_refined'[policy_annual_premium]) * 60
+VAR HealthPremiumCalculated = SUM('v_medical_refined'[premium_collected])
+
+-- 2. Detect which business line the user has selected in the slicer
+VAR SelectedLine = SELECTEDVALUE('v_executive_summary'[business_line])
+
+-- 3. The Switch Logic: Apply the multiplier ONLY to Motor
+RETURN 
+IF(
+    ISFILTERED('v_executive_summary'[business_line]),
+    -- If a specific line is selected:
+    IF(SelectedLine = "Motor", MotorPremiumCalculated, HealthPremiumCalculated),
+    -- If no line is selected (The "Total" View), sum both:
+    MotorPremiumCalculated + HealthPremiumCalculated
+)
+```
+Uses Branching Logic to handle disparate data sources. Motor uses an Exposure Proxy (60x) to correct for claimant-only reporting, while Health utilizes the SQL-engineered Technical Premium.
