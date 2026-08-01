@@ -7,3 +7,5 @@ Dynamic Alerting: Implemented conditional color formatting for the Institutional
 
 ## Data Governance
 "Identified a critical Selection Bias in the source Motor dataset (Claims-only register). To ensure the dashboard provides a realistic Institutional Loss Ratio, I engineered a Context-Aware Exposure Proxy in DAX. I applied a 60x multiplier to Motor premiums to simulate a standard 1.6% market frequency, reconstructing the missing 'Safe Driver' exposure without altering the raw claim integrity."
+
+Claims Deep-Dive: Focused on operational risk and indemnity leakage. Features a Waterfall severity analysis and a prioritized "High-Risk Audit List" for claims with missing police documentation.
