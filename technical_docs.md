@@ -40,3 +40,7 @@ IF(
 )
 ```
 Uses Branching Logic to handle disparate data sources. Motor uses an Exposure Proxy (60x) to correct for claimant-only reporting, while Health utilizes the SQL-engineered Technical Premium.
+
+
+Feature: Prescriptive Simulation Engine.
+Logic: Implemented dynamic DAX measures for Projected Loss Ratio tied to a 0-100% premium adjustment parameter. This allows Underwriters to perform real-time sensitivity analysis on portfolio profitability.
