@@ -12,3 +12,6 @@ Claims Deep-Dive: Focused on operational risk and indemnity leakage. Features a 
 
 Prescriptive Layer: Developed a Yield Impact model to quantify the financial gain of proposed rate interventions.
 Segmented Benchmarking: Integrated regional loss-ratio tracking to identify underpriced cohorts for targeted technical price adjustments.
+
+Yield Simulation: Demonstrated that a 5% institutional rate hike produces a $4.88M revenue increment, optimizing the Combined Ratio to 69%.
+Surgical Pricing: Identified specific regional variances (e.g., Northwest) where loss ratios exceed technical targets, necessitating segmented underwriting intervention.
