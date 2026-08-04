@@ -61,7 +61,7 @@ Initial audits revealed the Motor data was a "Claims-only Register"—it only sh
 *   **The Result:** This shifted the portfolio from looking "Bankrupt" to "Healthy," allowing for accurate executive planning and solvency reporting.
 
 ### 2. Operational Risk: The Documentation Gap
-![Indemnity Leakage](dashboard/screenshots/02_claims_deepdive.png)
+![Indemnity Leakage](dashboard/screenshots/05.Indemnity_Leakage.png)
 
 A high-severity portfolio requires evidence. My audit found that **343 claims (34.3%)** were missing police reports. 
 *   **The Threat:** Claims without police reports in the "Major Damage" category represent the highest probability for **fraudulent leakage**.
@@ -78,7 +78,7 @@ By harmonizing data across divisions, I isolated the financial impact of high-ri
 *   **The Insight:** High-risk individuals drive **nearly 2x the severity** of standard customers. While they are fewer in number, their "Burn Rate" on capital is significantly more aggressive.
 
 ### 4. Prescriptive Simulation: The Pricing Frontier
-![Premium Analysis](dashboard/screenshots/03.Premium%20Analysis.png)
+![Premium Analysis](dashboard/screenshots/03.Premium_Analysis.png)
 
 
 Using a **What-If Parameter**, I built a simulation engine to find the "Technical Price" across all territories.
