@@ -1,31 +1,33 @@
-#  Technical Documentation: Pipeline & Logic
+#  Project Pipeline & Business Logic
 
 ##  Data Architecture
-The project follows a **Medallion Architecture** using Google BigQuery as the warehouse:
-1. **Bronze:** Raw Kaggle CSV ingestion.
-2. **Silver:** Individual LOB views with `NULLIF` remediation and actuarial bucketing.
-3. **Gold:** A consolidated Semantic Bridge using `UNION ALL` and `CAST` for financial type-alignment.
+The data flows through three organized stages inside Google BigQuery:
+* **Bronze (Raw):** Original messy data uploaded straight from Kaggle.
+* **Silver (Cleaned):** Cleaned data views where missing values are fixed and organized into specific categories.
+* **Gold (Reporting):** A final table combining all data into a standardized format ready for the dashboard.
 
-##  Transformation Logic
-### Deterministic Date Hashing
-To enable stable time-series analysis without the volatility of `RAND()`, claim dates were generated using:
-`DATE(TIMESTAMP_MICROS(CAST(1735689600000000 + (ABS(MOD(FARM_FINGERPRINT(key), 1000000)) / 1000000.0 * Range) AS INT64)))`
-This ensures that the "January Loss Ratio" remains constant across every refresh.
+##  Smart Transformation Logic
 
-### Actuarial Exposure Proxy
-Identified **Selection Bias** in the source Motor data (Claims-only register). 
-* **The Fix:** Implemented a **60x Multiplier** on Motor premiums within the `Total Premium Collected` measure. 
-* **Logic:** Reconstructs the 98.4% "Safe Driver" population based on a standard 1.6% market frequency.
+### Consistent Fake Dates
+* **The Problem:** The raw dataset lacked dates, and using random functions causes data to change every time it refreshes.
+* **The Solution:** Used a math function (`FARM_FINGERPRINT`) to generate fake dates based on unique IDs.
+* **The Benefit:** Ensures dates remain completely stable and constant across every dashboard refresh.
 
-##  DAX Formula Factory
-### 1. Institutional Loss Ratio
+### Fixing Missing Policy Data (Exposure Proxy)
+* **The Problem:** The raw vehicle data only tracked drivers who made claims, completely missing safe drivers who paid premiums but never crashed.
+* **The Solution:** Multiplied vehicle premiums by **60x**.
+* **The Benefit:** Reconstructs the missing 98.4% safe driver population based on a standard 1.6% industry accident rate.
+
+##  Power BI KPI Calculations
+
+### 1. Total Loss Ratio
 `DIVIDE([Total Claim Amount], [Total Premium Collected], 0)`
-*Provides a real-time solvency signal; color-coded via SWITCH logic.*
+* **What it tracks:** Measures financial health by comparing total claims paid out against total premiums collected.
 
-### 2. Premium Yield Increment
+### 2. New Revenue Gain
 `[Simulated Premium] - [Total Premium Collected]`
-*Quantifies the marginal revenue gain from proposed price hikes.*
+* **What it tracks:** Calculates the exact extra money earned if the company switches to the new proposed prices.
 
 ### 3. Projected Loss Ratio
 `DIVIDE([Total Claim Amount], [Simulated Premium], 0)`
-*The core engine for the Prescriptive "What-If" simulation on Page 3.*
+* **What it tracks:** Drives the interactive "What-If" slider simulator on Page 3 to predict future financial performance.
