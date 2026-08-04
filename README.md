@@ -1,3 +1,26 @@
+
+## 📊 Dashboard Preview
+
+### 1. Institutional Overview
+*High-level solvency and regional risk concentration.*
+![Executive Overview](dashboard/screenshots/01_executive_overview.png)
+
+### 2. Claims Deep-Dive
+*Operational leakage and fraud detection audit.*
+![Claims Deep-Dive](dashboard/screenshots/02_claims_deepdive.png)
+
+### 3. Premium Intelligence
+*Prescriptive "What-If" simulations for rate adequacy.*
+![Premium Intelligence](dashboard/screenshots/03_premium_intelligence.png)
+
+### 4. Risk Lifecycle
+*Root-cause analysis via AI-driven Decomposition Trees.*
+![Risk Lifecycle](dashboard/screenshots/04_risk_lifecycle.png)
+
+## 🎥 Video Walkthrough
+[Click here to watch the 3-minute technical walkthrough](dashboard/demo/dashboard_walkthrough.mp4)
+
+
 ## Actuarial Metrics
 
 Burning Cost: Implemented via DAX to calculate the pure risk premium per exposure unit, enabling institutional profitability monitoring.
