@@ -27,7 +27,6 @@ https://github.com/user-attachments/assets/cac225c7-90d6-4da0-9912-8e5f92cad301
 
 <div align="center">
   <br>
-  <img src="dashboard/screenshots/01.%20Overview.png" width="950" alt="Executive Overview">
 
   <p>
     <b>Analyst:</b> Christopher Oroo | <b>Status:</b> Completed
