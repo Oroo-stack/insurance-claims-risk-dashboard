@@ -34,6 +34,7 @@
 4. [Technical Implementation](#iv-technical-implementation)
 5. [Reproducibility](#v-reproducibility)
 6. [Limitations & Assumptions](#vi-limitations--assumptions)
+   
 
 > ** Glossary of Key Insurance Terms Used in this Report:**
 > *   **Loss Ratio:** The heartbeat of insurance; Total Claims divided by Total Premiums.
@@ -41,6 +42,7 @@
 > *   **Indemnity Leakage:** Financial loss due to poor documentation or undetected fraud.
 > *   **Selection Bias:** A data flaw where only people who claimed are visible, hiding the "Safe Drivers."
 > *   **Exposure Proxy:** A mathematical fix used to reconstruct the full population of safe drivers.
+> *   **CUO:** Chief Underwriting Officer
 
 ---
 
@@ -94,7 +96,8 @@ Using a **What-If Parameter**, I built a simulation engine to find the "Technica
 To protect institutional solvency and reduce leakage, I recommend three actions:
 
 **1. Documentation & Fraud Control**
-*   **Police Report Mandate:** Implement a "Hard Stop" in the claims system for any motor accident exceeding $10k without an attached police report.
+* **Police Report Mandate:** Implement a "Hard Stop" in the claims system for any motor accident exceeding $9k without an attached police report. *(Data Justification: Audit logs show the $18.6M leakage is entirely driven by high-severity claims clustering above $9k per incident).*
+
 *   **Forensic Review:** Mandate the Fraud Investigation Unit (FIU) to audit the $18.6M "Not Reported" segment identified on the Claims Analysis page.
 
 **2. Surgical Pricing (Rate Adequacy)**
