@@ -1,19 +1,22 @@
 <div align="center">
-  <h1> Multi-Line Insurance Risk Intelligence & Pricing Suite</h1>
-  <p><i>End-to-End Cloud Data Pipeline, Actuarial Exposure Reconstruction, and Prescriptive "What-If" Pricing Simulation</i></p>
+  <h1> Insurance Risk Analytics & Pricing Dashboard <br>  (Bigquery SQL  + Power Bi)</h1>
+  <p><i>A dedicated analytical environment that transforms raw data into risk intelligence. It establishes a steady, deterministic date baseline for trend tracking, flags underpriced policies, and delivers a prescriptive simulator to forecast revenue yields.</i></p>
   <br>
 
-  <h3>Project Overview</h3>
-  <p style="max-width: 850px; font-size: 1.1em; line-height: 1.6;">
-    This project architected a professional insurance analytics pipeline to unify disparate data streams from <b>Motor (Auto)</b> and <b>Health (Medical)</b> divisions. <br><br>
-    The goal is to answer three key institutional questions:
-    <br>- Which behavioral segments are "burning" the most capital?
-    <br>- How do missing police reports impact fraud and indemnity leakage?
-    <br>- What specific price increase is required to restore institutional solvency?
-    <br><br>
-    Leveraging <b>Google BigQuery</b> for cloud warehousing and <b>Power BI</b> for simulation, I moved beyond simple reporting to build a decision-support tool for Chief Underwriting Officers (CUOs).
-  </p>
-  <br>
+ <h3>Project Overview</h3>
+<p style="max-width: 850px; font-size: 1.1em; line-height: 1.6; text-align: center;">
+  This project architected a professional insurance analytics pipeline to unify disparate data streams from <b>Motor (Auto)</b> and <b>Health (Medical)</b> divisions. <br><br>
+  The goal is to answer three key institutional questions:<br>
+  <span style="display: inline-block; text-align: left;">
+    - Which behavioral segments are "burning" the most capital?<br>
+    - How do missing police reports impact fraud and indemnity leakage?<br>
+    - What specific price increase is required to restore institutional solvency?
+  </span>
+  <br><br>
+  Leveraging <b>Google BigQuery SQL</b> for cloud warehousing and <b>Power BI</b> for simulation.
+</p>
+<br>
+
 
   <img src= "dashboard/screenshots/01. Overview.png" width="950" alt="Executive Overview">
 
