@@ -16,11 +16,17 @@
     Leveraging <b>Google BigQuery SQL</b> for cloud warehousing and <b>Power BI</b> for simulation.
   </p>
   <br>
+</div>
 
-  <h3>📺 Interactive Project Walkthrough</h3>
-  <video src="dashboard/demo/Insurance_Claims_Analytics_Dashboard_Walkthrough.mp4" width="950" controls muted autoplay loop></video>
-  <br><br>
+## 📺 Interactive Project Walkthrough
 
+
+
+https://github.com/user-attachments/assets/cac225c7-90d6-4da0-9912-8e5f92cad301
+
+
+<div align="center">
+  <br>
   <img src="dashboard/screenshots/01.%20Overview.png" width="950" alt="Executive Overview">
 
   <p>
@@ -29,6 +35,7 @@
 </div>
 
 ---
+
 
 
 ## 📑 Table of Contents
