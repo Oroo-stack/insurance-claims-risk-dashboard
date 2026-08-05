@@ -81,7 +81,7 @@ By harmonizing data across divisions, I isolated the financial impact of high-ri
 * **The Insight:** High-risk individuals drive **nearly 2x the severity** of standard customers. While they are fewer in number, their "Burn Rate" on capital is significantly more aggressive.
 
 ### 4. Prescriptive Simulation: The Pricing Frontier
-![Premium Analysis](dashboard/screenshots/03.%20Premium%20Analysis.png)
+![Premium Analysis](dashboard/screenshots/03_Premium_Analysis.png)
 
 Using a **What-If Parameter**, I built a simulation engine to find the "Technical Price" across all territories.
 * **Surgical Targeting:** The analysis shows widespread underpricing across four key territories (**northwest, southwest, northeast, and southeast**), all breaching the 70% technical loss target.
