@@ -119,11 +119,23 @@ To protect institutional solvency and reduce leakage, I recommend three actions:
 
 ---
 
+---
+
+## 📂 Data Sources
+To replicate this analysis, download the raw datasets from Kaggle:
+1. **Motor Claims Data:** [Auto Insurance Claims Data by Bunty Shah](https://kaggle.com)
+2. **Medical Claims Data:** [Medical Insurance Cost by Miri Choi](https://kaggle.com)
+
+*Note: The `/data` folder in this repository contains only 10-row samples for schema verification. Full datasets must be downloaded from the links above to run the BigQuery ETL scripts.*
+
+---
+
 ## V. Reproducibility
-1. **Warehouse:** Load raw CSVs into BigQuery.
-2. **SQL:** Run scripts `00` through `05` in the `/sql` folder in numerical order.
-3. **BI:** Connect Power BI to the 3 refined Views (`v_auto_refined`, `v_medical_refined`, `v_executive_summary`).
-4. **Simulation:** Use the `Premium Hike %` slider on the Premium Analysis page to test rate changes.
+1. **Download:** Obtain the raw CSVs from the [Data Sources](#-data-sources) section.
+2. **Ingest:** Upload the CSVs into a Google BigQuery dataset named `auto_insurance_claims`.
+3. **Execute:** Run the SQL scripts in the `/sql` folder in numerical order (`00` to `05`).
+4. **Connect:** Open Power BI and connect to the resulting BigQuery Views using **Import Mode**.
+5. **Analyze:** Interact with the simulation parameters to model pricing yield.
 
 ---
 
