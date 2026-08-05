@@ -34,7 +34,7 @@
 5. [Reproducibility](#v-reproducibility)
 6. [Limitations & Assumptions](#vi-limitations--assumptions)
    
-> 📖 **Glossary of Key Insurance Terms Used in this Report:**
+>  **Glossary of Key Insurance Terms Used in this Report:**
 > * **Loss Ratio:** The heartbeat of insurance; Total Claims divided by Total Premiums.
 > * **Burning Cost:** The average "pure" cost of a claim per policyholder.
 > * **Indemnity Leakage:** Financial loss due to poor documentation or undetected fraud.
