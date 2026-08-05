@@ -1,69 +1,86 @@
-#  Project Pipeline & Business Logic
+#  Technical Documentation: Pipeline & Actuarial Logic
 
 ##  Data Architecture
-The data flows through three organized stages inside Google BigQuery:
-* **Bronze (Raw):** Original messy data uploaded straight from Kaggle.
-* **Silver (Cleaned):** Cleaned data views where missing values are fixed and organized into specific categories.
-* **Gold (Reporting):** A final table combining all data into a standardized format ready for the dashboard.
+The project follows a **Medallion Architecture** using Google BigQuery as the centralized cloud warehouse. This structure ensures data integrity and a clear audit trail from raw ingestion to executive reporting.
 
-##  Smart Transformation Logic
+*   **Bronze (Raw):** Original disparate datasets uploaded from Kaggle. These remain immutable to preserve the "Source of Truth" for audit purposes.
+*   **Silver (Refined):** Business-specific views (`v_auto_refined`, `v_medical_refined`). Logic includes `NULLIF` remediation for data gaps, `DISTINCT` for deduplication, and actuarial risk bucketing (BMI/Age).
+*   **Gold (Reporting):** A consolidated Semantic Bridge (`v_executive_summary`) using `UNION ALL` and `FLOAT64` type-alignment to provide a unified institutional view for Power BI.
 
-### Consistent Fake Dates
-* **The Problem:** The raw medical dataset lacked dates, and using random functions causes data to change every time it refreshes.
-* **The Solution:** Used a math function (`FARM_FINGERPRINT`) to generate fake dates based on unique IDs.
-* **The Benefit:** Ensures dates remain completely stable and constant across every dashboard refresh.
+---
 
-### Fixing Missing Policy Data (Exposure Proxy)
-* **The Problem:** The raw vehicle data only tracked drivers who made claims, completely missing safe drivers who paid premiums but never crashed.
-* **The Solution:** Multiplied vehicle premiums by **60x**.
-* **The Benefit:** Reconstructs the missing 98.4% safe driver population based on a standard 1.6% industry accident rate.
+##  Transformation Logic
 
-##  Power BI KPI Calculations
+### 1. Deterministic Date Anchoring
+*   **The Problem:** The raw datasets lacked a synchronized time dimension, and using volatile functions like `RAND()` causes data to shift every time the dashboard refreshes.
+*   **The Solution:** Implemented deterministic date generation using `FARM_FINGERPRINT` to hash unique policy IDs into a stable 2025 date range.
+*   **The Benefit:** Ensures that Month-over-Month (MoM) trends and seasonality analysis remain constant and reproducible for financial audits.
 
-### 1. Total Loss Ratio
-```dax
-DIVIDE([Total Claim Amount], [Total Premium Collected], 0)
-```
-* **What it tracks:** Measures financial health by comparing total claims paid out against total premiums collected.
+### 2. Selection Bias Remediation (Exposure Proxy)
+*   **The Problem:** The raw Motor dataset was identified as a "Claims Register" (claimants only), resulting in an unrealistic 4,000% Loss Ratio because the safe, non-claiming drivers were missing.
+*   **The Solution:** Engineered an **Exposure Multiplier of 60x** within the DAX layer for the Motor line.
+*   **The Benefit:** Reconstructs the missing 98.4% "Safe Driver" population based on a standard 1.6% industry frequency, revealing the true institutional solvency of ~72%.
 
-### 2. New Revenue Gain
-```dax
-[Simulated Premium] - [Total Premium Collected]
-```
-* **What it tracks:** Calculates the exact extra money earned if the company switches to the new proposed prices.
+---
 
-### 3. Projected Loss Ratio
-```dax
-DIVIDE([Total Claim Amount], [Simulated Premium], 0)
-```
-* **What it tracks:** Drives the interactive "What-If" slider simulator on Page 3 to predict future financial performance.
+##  Power BI Actuarial Formula Library
 
-### 4. Institutional Loss Ratio
+### 1. Solvency & Performance 
+*These measures monitor if the institution is currently making an underwriting profit.*
+
+**Institutional Loss Ratio**
 ```dax
 Institutional Loss Ratio = DIVIDE([Total Claim Amount], [Total Premium Collected], 0)
 ```
-* **Purpose**: Tracks organizational solvency. It uses a dynamic `SWITCH` color-coding mechanism to flag high-risk ratios.
+*   **Business Logic:** The primary KPI for institutional health. It drives the dynamic "Traffic Light" gauge on the Overview page.
 
-### 5. Premium Yield Increment
+**Total Premium Collected )**
+```dax
+Total Premium Collected = 
+SUMX(
+    'v_executive_summary',
+    IF(
+        'v_executive_summary'[business_line] = "Motor",
+        'v_executive_summary'[premium_collected] * 60, -- 1.6% Frequency Proxy
+        'v_executive_summary'[premium_collected]
+    )
+)
+```
+*   **Actuarial Assumption:** Uses branching logic to apply the 60x multiplier only to Motor records while preserving the engineered technical premiums for the Health line.
+
+---
+
+### 2. Prescriptive Pricing (The Simulation Engine)
+*These measures drive the "What-If" simulator used by Underwriters to forecast revenue.*
+
+**Premium Yield Increment**
 ```dax
 Premium Yield Increment = [Simulated Premium] - [Total Premium Collected]
 ```
-* **Purpose**: Quantifies marginal revenue gains directly driven by the user-adjusted price increase parameters.
+*   **Purpose:** Quantifies the marginal revenue gain (new cash) directly generated by user-adjusted price increase parameters.
 
-### 6. Projected Loss Ratio
+**Projected Loss Ratio**
 ```dax
 Projected Loss Ratio = DIVIDE([Total Claim Amount], [Simulated Premium], 0)
 ```
-* **Purpose**: Operates as the underlying logic engine powering the prescriptive "What-If" scenario simulation.
+*   **Purpose:** Predicts future profitability. It allows management to find the "Technical Price" required to return underperforming regions to the 70% target.
 
-### 7. Policy Pricing Color
+---
+
+### 3. Visual Intelligence & Alerting
+*These measures provide actionable visual cues to guide the user's attention.*
+
+**Policy Pricing Color (Technical Margin Signal)**
 ```dax
 Policy Pricing Color = 
 IF(
     [Average Claim Amount] > [Simulated Average Premium], 
-    "#E81123", -- Eye-catching Red (Underpriced)
-    "#0078D4"  -- Slate Blue (Standard)
+    "#E81123", -- Red (Underpriced / Negative Margin)
+    "#0078D4"  -- Slate Blue (Profitable / Standard)
 )
 ```
-* **Purpose**: Dynamically drives conditional marker formatting for individual data points on the scatter plot visualization ( The "Pure Premium" vs "Current Premium" ).
+*   **Business Logic:** Drives conditional formatting for the "Individual Policy Adequacy" scatter plot. It identifies the "Tail Risk" by highlighting every policy where the cost of risk exceeds the price collected.
 
+---
+
+**Analyst Note:** Detailed SQL scripts for each phase (00-05) are available in the `/sql` directory of this repository for full pipeline transparency.
