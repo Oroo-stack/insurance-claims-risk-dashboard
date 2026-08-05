@@ -17,6 +17,10 @@
   </p>
   <br>
 
+  <h3>📺 Interactive Project Walkthrough</h3>
+  <video src="dashboard/demo/Insurance_Claims_Analytics_Dashboard_Walkthrough.mp4" width="950" controls muted autoplay loop></video>
+  <br><br>
+
   <img src="dashboard/screenshots/01.%20Overview.png" width="950" alt="Executive Overview">
 
   <p>
@@ -25,6 +29,7 @@
 </div>
 
 ---
+
 
 ## 📑 Table of Contents
 1. [Executive Summary: The Bottom Line](#i-executive-summary-the-bottom-line)
